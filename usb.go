@@ -259,8 +259,13 @@ func (c *Context) Close() error {
 	if err := c.checkOpenDevs(); err != nil {
 		return err
 	}
+	fmt.Println("-checkOpenDevs")
 	c.done <- struct{}{}
+	fmt.Println("-send to channel")
 	err := c.libusb.exit(c.ctx)
+	if err != nil {
+		fmt.Printf("fatal error in exit libusb. reason=%s", err.Error())
+	}
 	c.ctx = nil
 	return err
 }
